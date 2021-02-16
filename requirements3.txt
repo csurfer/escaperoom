@@ -1,5 +1,6 @@
 # Server requirements
 Flask==1.1.2
+jsonschema==v3.2.0
 
 # Developer requirements
 pre-commit

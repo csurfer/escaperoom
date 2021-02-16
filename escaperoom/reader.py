@@ -1,7 +1,10 @@
 from dataclasses import dataclass
-from json import loads
+from json import load, loads
+from os import path
 from typing import Any, Dict, List
 from uuid import uuid4
+
+import jsonschema
 
 
 @dataclass
@@ -38,12 +41,17 @@ class CampaignReader:
         with open(campaign_file, "r") as f:
             self.campaign = loads(f.read())
 
+        self.schema = None
+        here = path.abspath(path.dirname(__file__))
+        with open(path.join(here, "config.schema"), "r") as f:
+            self.schema = loads(f.read())
+
         # Validate the campaign.
         self.validate()
 
     def validate(self):
         """Method to validate the provided campaign."""
-        pass
+        jsonschema.validate(self.campaign, self.schema)
 
     def get_game_from_campaign(self) -> Dict[str, Any]:
         """Method to procure game setup from campaign."""

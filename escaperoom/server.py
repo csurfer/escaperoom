@@ -1,12 +1,12 @@
+import argparse
+
 from flask import Flask, redirect, render_template, request
 
 from .reader import CampaignReader
 
 app = Flask(__name__)
 
-GAME = CampaignReader(
-    "/home/csurfer/escaperoom/escaperoom/example_campaigns/example_campaign_1.json"
-).get_game_from_campaign()
+GAME = None
 
 
 @app.route("/")
@@ -49,3 +49,34 @@ def riddler(puzzle_id):
                     images=puzzle.images,
                     hints=puzzle.hints,
                 )
+
+
+def main():
+    global GAME
+
+    # Create command line parser.
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(dest="command")
+
+    # Create validation command parser.
+    validation = subparsers.add_parser("validation")
+    validation.add_argument("jsonfile", help="JSON file with escaperoom config")
+
+    # Create run command parser.
+    runner = subparsers.add_parser("run")
+    runner.add_argument("jsonfile", help="JSON file with escaperoom config")
+    runner.add_argument("--host", type=str, default="127.0.0.1")
+    runner.add_argument("--port", type=int, default=5000)
+
+    # Parse command line arguments.
+    arguments = parser.parse_args()
+
+    if arguments.command == "validation":
+        CampaignReader(arguments.jsonfile)
+
+    if arguments.command == "run":
+        # Set game configuration.
+        GAME = CampaignReader(arguments.jsonfile).get_game_from_campaign()
+
+        # Run flask app.
+        app.run(host=arguments.host, port=arguments.port)

@@ -1,2 +1,0 @@
-# escaperoom
-Escape room
