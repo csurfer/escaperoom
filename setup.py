@@ -46,7 +46,7 @@ setup(
         # Operating Systems.
         "Operating System :: POSIX",
         # Supported Languages.
-        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.8",
     ],
     install_requires=["Flask", "jsonschema"],
 )
