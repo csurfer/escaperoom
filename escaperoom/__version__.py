@@ -1,0 +1,8 @@
+__title__ = "escaperoom"
+__description__ = "Flask based microframework to generate virtual escape room."
+__url__ = "https://github.com/csurfer/escaperoom"
+__version__ = "0.0.1"
+__author__ = "Vishwas B Sharma"
+__author_email__ = "sharma.vishwas88@gmail.com"
+__license__ = "MIT"
+__copyright__ = "Copyright 2021 Vishwas B Sharma"

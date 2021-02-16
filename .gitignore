@@ -6,3 +6,4 @@ pyvenv.cfg
 # Python exclusions.
 **/*.pyc
 **/__pycache__/
+**.egg-info/
