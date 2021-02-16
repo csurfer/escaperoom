@@ -10,3 +10,6 @@ pyvenv.cfg
 
 # IDE
 .vscode/
+
+# PyPI
+dist/
