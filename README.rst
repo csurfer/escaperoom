@@ -23,6 +23,8 @@ Features
 
 * No coding knowledge required.
 
+* Design your own escape room experience for your friends and family to enjoy!
+
 Setup
 -----
 
