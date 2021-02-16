@@ -1,4 +1,8 @@
-# created by virtualenv automatically
+# Virtualenv exceptions.
 bin/
 lib/
 pyvenv.cfg
+
+# Python exclusions.
+**/*.pyc
+**/__pycache__/

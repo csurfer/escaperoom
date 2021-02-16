@@ -1,2 +1,5 @@
+# Server requirements
+Flask==1.1.2
+
 # Developer requirements
 pre-commit

@@ -1,0 +1,28 @@
+{
+    "story": {
+        "title": "It's elementary my dear watson",
+        "text": "Watson's Journal - Entry 221: The elusive criminal mastermind who we only know as Moriarty has given us the slip again. We raided Moriarty's bunker with Detective Inspector Lestrade in search of clues about his wareabouts. Little did we know the bunker would lock down on us with something much worse coming soon. The clock seems to be counting down to something. Its better we solve the clues and get out of this bunker as quickly as possible.",
+        "images": ["https://thumbs.gfycat.com/DapperFaintCormorant-size_restricted.gif"]
+    },
+    "puzzles": [{
+        "title": "Who?",
+        "text": "A weird contraption which holds liquid only upto a point. Add any more and the whole lot drains out. An ancient greek philosopher was credited with the design.",
+        "images": ["https://99percentinvisible.org/app/uploads/2016/12/cup-runneth-over.jpg"],
+        "hints": ["He was a famous mathematician too.", "Formula to find the length of hypotenuse in a right triange is named after him."],
+        "answer": "pythagoras"
+    },
+    {
+        "title": "Encrypted letter",
+        "text": "Ah! Saying Pythagoras aloud seems to have made this letter drop. May be this letter has the password to get out of this room. Sadly I am not able to read what it says... \"SGHR DMBQXOSHNM HR Z INJD RN HR SGD OZRRVNQC.\"",
+        "images": [],
+        "hints": ["Decrypting the letter might help.", "Looks like characters are replaced with their previous character in the alphabet sequence."],
+        "answer": "joke"
+    },
+    {
+        "title": "Location, Location, Location",
+        "text": "Finally the password worked and let us out of the room. We are safe for now. But, Moriarty is still in the wind. Looks like he has scribbled a lot on his blackboard. Of all this mess, two things seem to be of importance. The scribble \".- -. - .\", and the values\"a=48.8556, t=2.3522\". Can these tell us where he has headed to?",
+        "images": [],
+        "hints": ["The scribble might not be scribble at all. It looks like morse code.", "Wierd word aNtE, does the characters themselves have some significance", "Aha! Substituting values from second equation makes it a GPS co-ordinate."],
+        "answer": "paris"
+    }]
+}
