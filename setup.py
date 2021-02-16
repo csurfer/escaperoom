@@ -38,7 +38,6 @@ setup(
     classifiers=[
         # Intended Audience.
         "Intended Audience :: Developers",
-        "Intended Audience :: Entertainment",
         # License.
         "License :: OSI Approved :: MIT License",
         # Project maturity.
@@ -47,6 +46,8 @@ setup(
         "Operating System :: POSIX",
         # Supported Languages.
         "Programming Language :: Python :: 3.8",
+        # Topics
+        "Topic :: Games/Entertainment",
     ],
     install_requires=["Flask", "jsonschema"],
 )
