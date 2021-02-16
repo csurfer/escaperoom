@@ -7,3 +7,6 @@ pyvenv.cfg
 **/*.pyc
 **/__pycache__/
 **.egg-info/
+
+# IDE
+.vscode/
