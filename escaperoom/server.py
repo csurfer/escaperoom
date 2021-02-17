@@ -1,4 +1,5 @@
 import argparse
+import datetime
 
 from flask import Flask, redirect, render_template, request
 
@@ -7,6 +8,7 @@ from .reader import CampaignReader
 app = Flask(__name__)
 
 GAME = None
+START_TIME = None
 
 
 @app.route("/")
@@ -21,7 +23,12 @@ def index():
 
 @app.route("/puzzle/<puzzle_id>", methods=["GET", "POST"])
 def riddler(puzzle_id):
+    global START_TIME
+
     if request.method == "GET":
+        if puzzle_id == CampaignReader.STARTING_PUZZLE_KEY and START_TIME is None:
+            START_TIME = datetime.datetime.now()
+
         if puzzle_id in GAME:
             puzzle = GAME[puzzle_id]
             return render_template(
@@ -38,7 +45,17 @@ def riddler(puzzle_id):
             puzzle = GAME[puzzle_id]
             if request.form["answer"].lower() == puzzle.answer.lower():
                 if puzzle.next_puzzle == CampaignReader.FINAL_PUZZLE_KEY:
-                    return render_template("winner.html")
+                    seconds = int(
+                        (datetime.datetime.now() - START_TIME).total_seconds()
+                    )
+                    minutes = seconds // 60
+                    seconds = seconds % 60
+                    hours = minutes // 60
+                    minutes = minutes % 60
+                    return render_template(
+                        "winner.html",
+                        timetaken=f"{hours} hours {minutes} minutes {seconds} seconds",
+                    )
                 else:
                     return redirect(f"/puzzle/{puzzle.next_puzzle}")
             else:
