@@ -30,6 +30,7 @@ def get_puzzle(puzzle_id: str) -> Any:
 
     :param puzzle_id: ID of the puzzle.
     """
+    global START_TIME
     if puzzle_id == CampaignReader.STARTING_PUZZLE_KEY and START_TIME == EPOCH:
         START_TIME = datetime.datetime.now()
 
@@ -82,9 +83,9 @@ def submit_answer(puzzle_id: str) -> Any:
 def riddler(puzzle_id: str) -> Any:
     """Method to render the puzzles."""
     if request.method == "GET":
-        get_puzzle(puzzle_id)
+        return get_puzzle(puzzle_id)
     elif request.method == "POST":
-        submit_answer(puzzle_id)
+        return submit_answer(puzzle_id)
 
 
 def main():
@@ -105,11 +106,12 @@ def main():
     # Parse command line arguments.
     arguments = parser.parse_args()
 
-    if arguments.command == "validation":
+    if arguments.command == "validate":
         CampaignReader(arguments.jsonfile)
 
     if arguments.command == "run":
         # Set game configuration.
+        global GAME
         GAME = CampaignReader(arguments.jsonfile).get_game_from_campaign()
 
         # Run flask app.

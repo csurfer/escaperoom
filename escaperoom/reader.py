@@ -47,9 +47,6 @@ class CampaignReader:
         with open(path.join(here, "config.schema"), "r") as f:
             self.schema: Dict[str, Any] = loads(f.read())
 
-        # Validate the campaign.
-        self.validate()
-
     def validate(self) -> None:
         """Method to validate the provided campaign.
 
