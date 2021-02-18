@@ -1,7 +1,7 @@
 escaperoom
 ==========
 
-|pypiv| |pyv| |Licence| |Thanks|
+|pypiv| |pyv| |Licence|
 
 Escape rooms are a game form where the objective is to complete the mission and "escape"
 from a locked room. A successful escape involves finding hidden clues and solving puzzles
@@ -24,6 +24,13 @@ Features
 * No coding knowledge required.
 
 * Design your own escape room experience for your friends and family to enjoy!
+
+Demo
+----
+
+Using `sherlockcampaign`_ generates an EscapeRoom as shown in the demo.
+
+|Demo|
 
 Setup
 -----
@@ -82,6 +89,38 @@ Configuration
 This is the only detail you need to worry about. A JSON file in a specific format contains
 details of the escape room you want to host and this section throws light on the different
 components of the configuration file.
+
+Example configuration file:
+
+.. code:: json
+
+    {
+        "story": {
+            "title": "Sample title.",
+            "text": "Sample text.",
+            "images": ["<story image1>", "<story image2>"]
+        },
+        "puzzles": [
+            {
+                "title": "Puzzle 1 title",
+                "text": "Puzzle 1 text",
+                "images": ["<puzzle1 image1>", "<puzzle1 image2>"],
+                "hints": ["<puzzle1 hint1>", "<puzzle1 hint2>"],
+                "answer": "<puzzle1 answer>"
+            },
+            {
+                "title": "Puzzle 2 title",
+                "text": "Puzzle 2 text",
+                "images": ["<puzzle2 image1>", "<puzzle2 image2>"],
+                "hints": ["<puzzle2 hint1>", "<puzzle2 hint2>"],
+                "answer": "<puzzle2 answer>"
+            },
+            .
+            .
+            .
+            .
+        ]
+    }
 
 Each configuration file has two main components.
 
@@ -159,9 +198,6 @@ If you found this package fun/useful you can buy me a cup of coffee using
 .. |Donate| image:: https://www.paypalobjects.com/webstatic/en_US/i/btn/png/silver-pill-paypal-44px.png
    :target: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3BSBW7D45C4YN&lc=US&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted
 
-.. |Thanks| image:: https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg
-   :target: https://saythanks.io/to/csurfer
-
 .. _issue tracker: https://github.com/csurfer/escaperoom/issues
 
 .. |Licence| image:: https://img.shields.io/badge/license-MIT-blue.svg
@@ -175,4 +211,8 @@ If you found this package fun/useful you can buy me a cup of coffee using
 
 .. _examplecampaigns: https://github.com/csurfer/escaperoom/tree/main/escaperoom/example_campaigns
 
+.. _sherlockcampaign: https://github.com/csurfer/escaperoom/tree/main/escaperoom/example_campaigns/sherlock.json
+
 .. _jsonschema: https://github.com/csurfer/escaperoom/blob/main/escaperoom/config.schema
+
+.. |Demo| image:: https://i.imgur.com/g3R7TFY.gif
