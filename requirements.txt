@@ -5,3 +5,5 @@ jsonschema==v3.2.0
 # Developer requirements
 pre-commit
 twine
+pytest
+tox

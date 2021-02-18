@@ -13,3 +13,6 @@ pyvenv.cfg
 
 # PyPI
 dist/
+
+# tox
+.tox

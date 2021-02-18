@@ -34,6 +34,8 @@ setup(
     license=about["__license__"],
     packages=["escaperoom"],
     entry_points={"console_scripts": ["escaperoom=escaperoom.server:main"]},
+    tests_require = ['pytest', 'tox'],
+    test_suite="tests",
     keywords="Generate virtual escape rooms from JSON config without a single line of code.",
     classifiers=[
         # Intended Audience.

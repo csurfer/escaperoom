@@ -17,7 +17,7 @@
                     }
                 }
             },
-            "required": ["title", "text"]
+            "required": ["title", "text", "images"]
         },
         "puzzles": {
             "type": "array",
@@ -46,8 +46,9 @@
                         "type": "string"
                     }
                 },
-                "required": ["title", "text", "answer"]
+                "required": ["title", "text", "images", "hints", "answer"]
             }
         }
-    }
+    },
+    "required": ["story", "puzzles"]
 }
