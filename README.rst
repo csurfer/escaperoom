@@ -143,7 +143,9 @@ text
 
 images
   (optional) Set of images you might want to show to have a dramatic effect. NOTE: Each image should either
-  be a URL or absolute path to an image stored on your device.
+  be a URL or absolute path to an image stored on your device. NOTE: The key itself is not optional but the
+  values are i,e campaigns should have this key for story but the values can be left empty as an empty list
+  "[]"
 
 puzzles
 ~~~~~~~
@@ -158,11 +160,14 @@ text
 
 images
   (optional) Set of images you might want to show to have a dramatic effect. NOTE: Each image should either
-  be a URL or absolute path to an image stored on your device.
+  be a URL or absolute path to an image stored on your device. NOTE: The key itself is not optional but the
+  values are i,e campaigns should have this key for story but the values can be left empty as an empty list
+  "[]"
 
 hints
   (optional) Set of hints you might want to give to your friends to help them understand/solve the
-  puzzles you have set.
+  puzzles you have set. NOTE: The key itself is not optional but the values are i,e campaigns should have
+  this key for story but the values can be left empty as an empty list "[]"
 
 answer
   (requied) Answer to your puzzle. Keep it as a word or a number to avoid confusions.
