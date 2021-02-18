@@ -39,13 +39,20 @@ class CampaignReader:
         :raises: ValidationError if campaign doesn't conform to `config.schema`.
         """
         # Read campaign JSON.
-        with open(campaign_file, "r") as f:
-            self.campaign: Dict[str, Any] = loads(f.read())
+        self.campaign: Dict[str, Any] = self._load_file(campaign_file)
 
         # Read config.schema for validation.
         here = path.abspath(path.dirname(__file__))
-        with open(path.join(here, "config.schema"), "r") as f:
-            self.schema: Dict[str, Any] = loads(f.read())
+        self.schema = self._load_file(path.join(here, "config.schema"))
+
+    def _load_file(self, file_path: str) -> Dict[str, Any]:
+        """Method to load JSON file and return a dictionary.
+
+        :param file_path: JSON file path.
+        :type str:
+        """
+        with open(file_path, "r") as f:
+            return loads(f.read())
 
     def validate(self) -> None:
         """Method to validate the provided campaign.
