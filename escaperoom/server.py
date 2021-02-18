@@ -1,36 +1,72 @@
 import argparse
 import datetime
+from typing import Any, Optional
 
 from flask import Flask, redirect, render_template, request
 
 from .reader import CampaignReader
+from .room import Game
 
+# Flask app.
 app = Flask(__name__)
 
-GAME = None
-START_TIME = None
+# Global variable for capturing game details.
+GAME: Optional[Game] = None
+# Global variable for capturing total time.
+EPOCH: datetime.datetime = datetime.datetime(1970, 1, 1)
+START_TIME: datetime.datetime = EPOCH
 
 
 @app.route("/")
 def index():
+    """Method to render homepage."""
     return render_template(
-        "index.html",
-        title=GAME[CampaignReader.TITLE_KEY],
-        text=GAME[CampaignReader.TEXT_KEY],
-        images=GAME[CampaignReader.IMAGES_KEY],
+        "index.html", title=GAME.title, text=GAME.text, images=GAME.images,
     )
 
 
-@app.route("/puzzle/<puzzle_id>", methods=["GET", "POST"])
-def riddler(puzzle_id):
-    global START_TIME
+def get_puzzle(puzzle_id: str) -> Any:
+    """Method to get the puzzle.
 
-    if request.method == "GET":
-        if puzzle_id == CampaignReader.STARTING_PUZZLE_KEY and START_TIME is None:
-            START_TIME = datetime.datetime.now()
+    :param puzzle_id: ID of the puzzle.
+    """
+    if puzzle_id == CampaignReader.STARTING_PUZZLE_KEY and START_TIME == EPOCH:
+        START_TIME = datetime.datetime.now()
 
-        if puzzle_id in GAME:
-            puzzle = GAME[puzzle_id]
+    if GAME and puzzle_id in GAME.puzzles:
+        puzzle = GAME.puzzles[puzzle_id]
+        return render_template(
+            "puzzle.html",
+            title=puzzle.title,
+            text=puzzle.text,
+            images=puzzle.images,
+            hints=puzzle.hints,
+        )
+    else:
+        return redirect("/404")
+
+
+def submit_answer(puzzle_id: str) -> Any:
+    """Method to submit answer to the puzzle.
+
+    :param puzzle_id: ID of the puzzle.
+    """
+    if GAME and puzzle_id in GAME.puzzles:
+        puzzle = GAME.puzzles[puzzle_id]
+        if request.form["answer"].lower() == puzzle.answer.lower():
+            if puzzle.next_puzzle == CampaignReader.FINAL_PUZZLE_KEY:
+                seconds = int((datetime.datetime.now() - START_TIME).total_seconds())
+                minutes = seconds // 60
+                seconds = seconds % 60
+                hours = minutes // 60
+                minutes = minutes % 60
+                return render_template(
+                    "winner.html",
+                    timetaken=f"{hours} hours {minutes} minutes {seconds} seconds",
+                )
+            else:
+                return redirect(f"/puzzle/{puzzle.next_puzzle}")
+        else:
             return render_template(
                 "puzzle.html",
                 title=puzzle.title,
@@ -38,46 +74,27 @@ def riddler(puzzle_id):
                 images=puzzle.images,
                 hints=puzzle.hints,
             )
-        else:
-            redirect("/404")
+    else:
+        return redirect("/404")
+
+
+@app.route("/puzzle/<puzzle_id>", methods=["GET", "POST"])
+def riddler(puzzle_id: str) -> Any:
+    """Method to render the puzzles."""
+    if request.method == "GET":
+        get_puzzle(puzzle_id)
     elif request.method == "POST":
-        if puzzle_id in GAME:
-            puzzle = GAME[puzzle_id]
-            if request.form["answer"].lower() == puzzle.answer.lower():
-                if puzzle.next_puzzle == CampaignReader.FINAL_PUZZLE_KEY:
-                    seconds = int(
-                        (datetime.datetime.now() - START_TIME).total_seconds()
-                    )
-                    minutes = seconds // 60
-                    seconds = seconds % 60
-                    hours = minutes // 60
-                    minutes = minutes % 60
-                    return render_template(
-                        "winner.html",
-                        timetaken=f"{hours} hours {minutes} minutes {seconds} seconds",
-                    )
-                else:
-                    return redirect(f"/puzzle/{puzzle.next_puzzle}")
-            else:
-                return render_template(
-                    "puzzle.html",
-                    title=puzzle.title,
-                    text=puzzle.text,
-                    images=puzzle.images,
-                    hints=puzzle.hints,
-                )
+        submit_answer(puzzle_id)
 
 
 def main():
-    global GAME
-
     # Create command line parser.
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command")
 
     # Create validation command parser.
-    validation = subparsers.add_parser("validation")
-    validation.add_argument("jsonfile", help="JSON file with escaperoom config")
+    validator = subparsers.add_parser("validate")
+    validator.add_argument("jsonfile", help="JSON file with escaperoom config")
 
     # Create run command parser.
     runner = subparsers.add_parser("run")

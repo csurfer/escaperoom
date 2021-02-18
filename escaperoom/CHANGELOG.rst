@@ -1,5 +1,8 @@
 Release History
 ===============
+v0.0.3
+------
+* Better type safety and documentation.
 
 v0.0.2
 -------
