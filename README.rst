@@ -71,7 +71,7 @@ JSON file provided is validated against the `jsonschema`_ file for type and key 
 
 .. code:: bash
 
-    escaperoom validation <path_to_json_file>
+    escaperoom validate <path_to_json_file>
 
 Running/Hosting the escape room
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
