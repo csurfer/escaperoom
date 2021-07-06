@@ -5,7 +5,7 @@ from uuid import uuid4
 
 import jsonschema
 
-from .room import Game, Puzzle
+from room import Game, Puzzle
 
 
 class CampaignReader:
