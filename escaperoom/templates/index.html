@@ -14,7 +14,7 @@
     <div class="container">
         <div class="jumbotron">
             <h1 class="display-4">Escaperoom!</h1>
-            <p class="lead">Work together as a team to solve puzzles. Escape the room before time runs out.</p>
+            <p class="lead">Work together as a team to solve puzzles. Escape the room before time runs out after {{playtime}} minutes.</p>
             <hr class="my-4">
             <p><b>{{title}}</b></p>
             <p>{{text}}</p>
@@ -38,9 +38,12 @@
             </div>
             {% endif %}
             <br/>
-            <p class="lead">
-              <a class="btn btn-primary btn" href="/puzzle/1" role="button">Ready, Set, Go...</a>
-            </p>
+
+			<form method="post">
+				<p><input type=text name=teamname placeholder="Enter your teamname here">
+				<p><input type=submit value="Ready, Set, Go...">
+			</form>
+			
         </div>
     </div>
 

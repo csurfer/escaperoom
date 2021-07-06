@@ -1,38 +1,47 @@
 import argparse
-import datetime
+from datetime import *
 from typing import Any, Optional
 
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, make_response
 
-from .reader import CampaignReader
-from .room import Game
+from reader import CampaignReader
+from room import Game
+import logging
 
 # Flask app.
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 # Global variable for capturing game details.
 GAME: Optional[Game] = None
-# Global variable for capturing total time.
-EPOCH: datetime.datetime = datetime.datetime(1970, 1, 1)
-START_TIME: datetime.datetime = EPOCH
+MAX_PLAY_TIME_MINUTES = 60
 
-
-@app.route("/")
+@app.route("/", methods=['POST', 'GET'])
 def index():
     """Method to render homepage."""
-    return render_template(
-        "index.html", title=GAME.title, text=GAME.text, images=GAME.images,
-    )
-
+    if request.method == 'GET':
+        return render_template(
+            "index.html", title=GAME.title, text=GAME.text, images=GAME.images, playtime=MAX_PLAY_TIME_MINUTES,
+        )
+    elif request.method == 'POST':
+        user = request.form['teamname']
+        if not user:
+            raise
+        expireTime = datetime.now() + timedelta(minutes = (MAX_PLAY_TIME_MINUTES + 60))
+        response = make_response(redirect("/puzzle/1"))
+        response.set_cookie('userID', user, expires=expireTime)
+        response.set_cookie('startTime', str(datetime.now()), expires=expireTime)
+        return response
 
 def get_puzzle(puzzle_id: str) -> Any:
     """Method to get the puzzle.
 
     :param puzzle_id: ID of the puzzle.
     """
-    global START_TIME
-    if puzzle_id == CampaignReader.STARTING_PUZZLE_KEY and START_TIME == EPOCH:
-        START_TIME = datetime.datetime.now()
+    if puzzle_id == CampaignReader.STARTING_PUZZLE_KEY:
+        teamName = request.cookies.get('userID')
+        startTime = request.cookies.get('startTime')
+        app.logger.info('Team ' + teamName + ' started at ' + startTime)
 
     if GAME and puzzle_id in GAME.puzzles:
         puzzle = GAME.puzzles[puzzle_id]
@@ -54,19 +63,29 @@ def submit_answer(puzzle_id: str) -> Any:
     """
     if GAME and puzzle_id in GAME.puzzles:
         puzzle = GAME.puzzles[puzzle_id]
+        start_time = datetime.fromisoformat(request.cookies.get('startTime'))
+        team_name = request.cookies.get('userID')
+        playing_time = datetime.now() - start_time
         if request.form["answer"].lower() == puzzle.answer.lower():
             if puzzle.next_puzzle == CampaignReader.FINAL_PUZZLE_KEY:
-                seconds = int((datetime.datetime.now() - START_TIME).total_seconds())
-                minutes = seconds // 60
-                seconds = seconds % 60
-                hours = minutes // 60
-                minutes = minutes % 60
+                app.logger.info(team_name + " finished in " + str(playing_time))
+                hours, remainder = divmod(playing_time.total_seconds(), 3600)
+                minutes, seconds = divmod(remainder, 60)
                 return render_template(
                     "winner.html",
-                    timetaken=f"{hours} hours {minutes} minutes {seconds} seconds",
+                    timetaken=f"{int(round(hours, 0))} hours {int(round(minutes, 0))} minutes {int(round(seconds, 0))} seconds",
                 )
             else:
+                app.logger.info(team_name + " goes to puzzle " + puzzle.title + " after " + str(playing_time))
                 return redirect(f"/puzzle/{puzzle.next_puzzle}")
+        elif (playing_time.total_seconds() / 60) > MAX_PLAY_TIME_MINUTES:
+            app.logger.info(team_name + " failed after " + str(playing_time))
+            hours, remainder = divmod(playing_time.total_seconds(), 3600)
+            minutes, seconds = divmod(remainder, 60)
+            return render_template(
+                "loser.html",
+                timetaken=f"{int(round(hours, 0))} hours {int(round(minutes, 0))} minutes {int(round(seconds, 0))} seconds",
+            )
         else:
             return render_template(
                 "puzzle.html",
@@ -116,3 +135,6 @@ def main():
 
         # Run flask app.
         app.run(host=arguments.host, port=arguments.port)
+
+if __name__ == '__main__':
+    main()
